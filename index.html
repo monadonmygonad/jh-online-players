@@ -251,6 +251,7 @@
         const table = document.getElementById("servers");
         const empty = document.getElementById("empty");
 
+        function fetchData() {
         fetch("https://jhstats.fly.dev/api/v1/tracker/online-players")
             .then(r => r.json())
             .then(({ servers }) => {
@@ -369,6 +370,13 @@
                 console.error(err);
                 table.outerHTML = `<div class="empty">Failed to load players.</div>`;
             });
+        }
+
+        // Initial fetch
+        fetchData();
+
+        // Auto-refresh every 30 seconds
+        setInterval(fetchData, 30000);
 
         function escapeHtml(str) {
             return String(str).replace(/[&<>"']/g, m => ({
