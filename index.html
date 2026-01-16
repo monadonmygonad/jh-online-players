@@ -472,10 +472,29 @@
         }
 
         function showPlayers(players) {
+            // Track currently open detail rows before rebuilding
+            const openDetails = new Set();
+            table.querySelectorAll(".details-row").forEach(row => {
+                if (row.style.display !== "none") {
+                    const idx = row.getAttribute("data-details-for");
+                    if (idx) openDetails.add(idx);
+                }
+            });
+
             const anyPlayerOnline = players.length > 0;
             empty.style.display = anyPlayerOnline ? "none" : "block"
             body.innerHTML = players.map((player, index) => playerToHtmlRow(player, index))
                 .join("");
+
+            // Restore the open state of detail rows
+            openDetails.forEach(idx => {
+                const detailsRow = table.querySelector(`.details-row[data-details-for="${idx}"]`);
+                const moreBtn = table.querySelector(`.more-btn[data-toggle="${idx}"]`);
+                if (detailsRow && moreBtn) {
+                    detailsRow.style.display = "";
+                    moreBtn.textContent = "Hide";
+                }
+            });
         }
 
         function getPlayersFromServers(servers) {
