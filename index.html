@@ -529,7 +529,7 @@
         }
 
         function fetchData() {
-            fetch("https://jhstats.fly.dev/api/v1/tracker/online-players")
+            fetch("https://api.jump4life.org/api/v1/tracker/online-players")
                 .then(r => r.json())
                 .then(({ servers }) => {
                     const players = getPlayersFromServers(servers);
